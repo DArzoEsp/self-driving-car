@@ -14,7 +14,12 @@ class Car {
         this.controls = new Controls();
     }
 
-    update(context) {                              // this function will update the position of the car (x, y)
+    update() {
+        this.#move();
+    }
+
+    #move() {                                   // this function will update the position of the car (x, y)
+
         if (this.controls.forward) {
             this.speed -= this.acceleration;
         } 
@@ -41,11 +46,16 @@ class Car {
             this.speed = 0;
         }
 
-        if(this.controls.left) {
-            this.angle -= 0.03;
-        } else if(this.controls.right) {
-            this.angle += 0.03;
+        if(this.speed != 0) {
+            const flip = this.speed > 0 ? 1 : -1;       // helps decide at what angle to keep the car when turning in multiple directions fast
+            if(this.controls.left) {
+                this.angle -= 0.03 * flip;
+            } else if(this.controls.right) {
+                this.angle += 0.03 * flip;
+            }        
         }
+
+        
 
         this.x += Math.sin(this.angle) * this.speed;
         this.y += Math.cos(this.angle) * this.speed;
